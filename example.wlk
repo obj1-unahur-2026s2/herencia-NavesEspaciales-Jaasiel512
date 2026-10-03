@@ -1,6 +1,7 @@
 class Nave{
   var property velocidad = 0
   var property direccion = 0
+  var property combustible = 0
 
   method acelerar(numero) {
     velocidad = (velocidad + numero).min(100000) 
@@ -28,20 +29,36 @@ class Nave{
     }
   }
 
-  method prepararViaje()
+  method cargarCombustible(cant){
+    combustible += cant
+  }
+  method descargarCombustible(cant){
+    combustible -= cant
+  }
+
+  method prepararViaje(){
+    self.cargarCombustible(30000)
+    self.acelerar(5000)
+  }
+
+  method estaTranquila() = combustible >= 4000 and velocidad < 12000
+
 }
 
 class NaveBaliza inherits Nave{
-  var property color = "rojo"
+  var property color = "azul"
 
   method cambiarColorDeBaliza(nuevoColor) {
     color = nuevoColor
   }
 
   override method prepararViaje() {
+    super()
     self.cambiarColorDeBaliza("verde")
     self.ponerseParaleloAlSol()
-  }   
+  }
+
+  override method estaTranquila() = super() and color != "rojo"    
 }
 
 class NavePasajeros inherits Nave{
@@ -107,6 +124,8 @@ class NaveCombate inherits Nave{
     self.acelerar(15000)
     self.emitirMensaje("Saliendo en mision")
   }
+
+  override method estaTranquila() = super() and not self.misilesDesplegados()
 }
 
 object invisible{
@@ -130,3 +149,22 @@ object misiles{
     condicion = false
   }
 }
+
+class NaveHospital inherits NavePasajeros{
+  var property quirofanos = true 
+
+  method quirofanosPreparados() {
+    quirofanos = true
+  }
+  method quirofanosNoPreparados() {
+    quirofanos = false
+  }
+
+  override method estaTranquila() = super() and not quirofanos
+}
+
+class NaveCombateSigilosa inherits NaveCombate{
+  override method estaTranquila() = super() and not self.estaInvisible()
+}
+
+

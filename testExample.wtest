@@ -1,9 +1,29 @@
-import example.pepita
+import Naves.*
 
-describe "group of tests for pepita" {
+describe "Probando Naves" {
+  test "Nave baliza cambia de color y va hacia el sol" {
+    const naveBaliza1 = new NaveBaliza()
 
-  test "pepita has initial energy" {
-    assert.equals(100, pepita.energy())
+    naveBaliza1.prepararViaje()
+    naveBaliza1.recibirAmenaza()
+    assert.that(naveBaliza1.cambiosDeColor() != 0)
+    assert.equals(naveBaliza1.direccion(), 10)
   }
 
+  test "Nave de pasajeros posee 30 raciones luego de una amenaza"{
+    const navePasajeros1 = new NavePasajeros(capacidad = 10)
+
+    navePasajeros1.prepararViaje()
+    navePasajeros1.recibirAmenaza()
+    assert.equals(navePasajeros1.comida(), 30)
+  }
+
+  test "Nave de combate sigilosa desplega misiles y esta invisible"{
+    const naveSigilosa1 = new NaveCombateSigilosa()
+
+    naveSigilosa1.prepararViaje()
+    naveSigilosa1.recibirAmenaza()
+    assert.that(naveSigilosa1.estaInvisible())
+    assert.that(naveSigilosa1.misilesDesplegados())
+  }
 }
